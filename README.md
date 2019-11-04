@@ -1,14 +1,15 @@
 # finance_app
 
 My first Flutter project.
-Simple app to add ones spending according to date.
+Simple app to add one's spending according to date.
 Graph shows the ratio of total spending in the past 7 days.
 
-# features
+## features
 
-Data stored in cache so restarting will delete the data.
+Data is stored in cache so restarting will delete the data.
 No animations added.
 Simple app inline with a Udemy course.
+Different look for the IOS version.
 
 ## Getting Started
 
