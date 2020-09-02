@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 import './widgets/transaction_list.dart';
 import './widgets/new_transaction.dart';
@@ -16,26 +15,23 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Personal Expenses',
+      title: 'Track Expense',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.purple,
-        accentColor: Colors.amber,
-        errorColor: Colors.grey[700],
+        errorColor: Colors.red,
         fontFamily: 'Quicksand',
         textTheme: ThemeData.light().textTheme.copyWith(
-              title: TextStyle(
+              headline6: TextStyle(
                 fontFamily: 'OpenSans',
                 fontWeight: FontWeight.bold,
-                fontSize: 17,
+                fontSize: 18,
               ),
               button: TextStyle(color: Colors.white),
             ),
         appBarTheme: AppBarTheme(
           textTheme: ThemeData.light().textTheme.copyWith(
-                title: TextStyle(
-                  fontFamily: 'OpenSans',
-                  fontSize: 20,
-                ),
+                headline6: TextStyle(fontFamily: 'OpenSans', fontSize: 20),
               ),
         ),
       ),
@@ -45,7 +41,6 @@ class MyApp extends StatelessWidget {
 }
 
 class MyHomePage extends StatefulWidget {
-  // String titleInput, amountInput;
   @override
   _MyHomePageState createState() => _MyHomePageState();
 }
@@ -57,15 +52,8 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
     //   title: 'Dropped',
     //   amount: 70.05,
     //   date: DateTime.now(),
-    // ),
-    // Transaction(
-    //   id: 't2',
-    //   title: 'Sex',
-    //   amount: 100,
-    //   date: DateTime.now(),
     // )
   ];
-
   bool _showChart = true;
 
   @override
@@ -75,28 +63,25 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
   }
 
   @override
-  void didChangeAppLifeCycle(AppLifecycleState state){
-    print(state);
-  }
-
-  @override
-  dispose(){
+  dispose() {
     WidgetsBinding.instance.removeObserver(this);
     super.dispose();
   }
 
   List<Transaction> get _recentTransactions {
-    return _userTransactions.where((tx) {
-      return tx.date.isAfter(
-        DateTime.now().subtract(
-          Duration(days: 7),
-        ),
-      );
-    }).toList();
+    return _userTransactions
+        .where(
+          (tx) => tx.date.isAfter(DateTime.now().subtract(Duration(days: 7))),
+        )
+        .toList();
   }
 
+  // adding new transactions
   void _addNewTransaction(
-      String txTitle, double txAmount, DateTime chosenDate) {
+    String txTitle,
+    double txAmount,
+    DateTime chosenDate,
+  ) {
     final newTx = Transaction(
       title: txTitle,
       amount: txAmount,
@@ -109,6 +94,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
     });
   }
 
+  // delete transaction
   void _deleteTransaction(String id) {
     setState(() {
       _userTransactions.removeWhere((tx) => tx.id == id);
@@ -117,10 +103,11 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
 
   void _startAddNewTransaction(BuildContext ctx) {
     showModalBottomSheet(
-        context: ctx,
-        builder: (_) {
-          return NewTransaction(_addNewTransaction);
-        });
+      context: ctx,
+      builder: (_) {
+        return NewTransaction(_addNewTransaction);
+      },
+    );
   }
 
   List<Widget> _buildLandscapeContent(
@@ -134,7 +121,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
         children: <Widget>[
           Text(
             'Show Chart',
-            style: Theme.of(context).textTheme.title,
+            style: Theme.of(context).textTheme.headline6,
           ),
           Switch.adaptive(
             activeColor: Theme.of(context).accentColor,
@@ -182,9 +169,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
     final isLandscape = mediaQuery.orientation == Orientation.landscape;
     final PreferredSizeWidget appBar = Platform.isIOS
         ? CupertinoNavigationBar(
-            middle: Text(
-              'Personal Expenses',
-            ),
+            middle: Text('Expense Tracker'),
             trailing: Row(
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
@@ -196,9 +181,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
             ),
           )
         : AppBar(
-            title: Text(
-              'Personal Expenses',
-            ),
+            title: Text('Expense Tracker'),
             actions: <Widget>[
               IconButton(
                 icon: Icon(Icons.add),
@@ -210,7 +193,7 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
       height: (mediaQuery.size.height -
               appBar.preferredSize.height -
               mediaQuery.padding.top) *
-          ((isLandscape)?0.86:0.68),
+          ((isLandscape) ? 0.86 : 0.68),
       child: TransactionList(
         _userTransactions,
         _deleteTransaction,
@@ -238,12 +221,13 @@ class _MyHomePageState extends State<MyHomePage> with WidgetsBindingObserver {
         : Scaffold(
             appBar: appBar,
             body: pageBody,
-            floatingActionButtonLocation:
-                FloatingActionButtonLocation.centerFloat,
+            // floatingActionButtonLocation:
+            //     FloatingActionButtonLocation.centerFloat,
             floatingActionButton: Platform.isIOS
                 ? Container()
-                : FloatingActionButton(
-                    child: Icon(Icons.add),
+                : FloatingActionButton.extended(
+                    icon: Icon(Icons.add),
+                    label: Text("Create"),
                     onPressed: () => _startAddNewTransaction(context),
                   ),
           );

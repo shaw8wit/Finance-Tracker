@@ -16,7 +16,7 @@ class TransactionList extends StatelessWidget {
               children: <Widget>[
                 Text(
                   'No Transactions added yet!',
-                  style: Theme.of(context).textTheme.title,
+                  style: Theme.of(context).textTheme.headline6,
                 ),
                 const SizedBox(
                   height: 20,
@@ -34,7 +34,9 @@ class TransactionList extends StatelessWidget {
         : ListView.builder(
             itemBuilder: (ctx, index) {
               return TransactionItem(
-                  transaction: transactions[index], deleteTx: deleteTx);
+                transaction: transactions[index],
+                deleteTx: deleteTx,
+              );
             },
             itemCount: transactions.length,
           );

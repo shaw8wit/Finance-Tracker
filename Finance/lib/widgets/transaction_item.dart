@@ -16,10 +16,7 @@ class TransactionItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       elevation: 5,
-      margin: EdgeInsets.symmetric(
-        vertical: 6,
-        horizontal: 8,
-      ),
+      margin: EdgeInsets.symmetric(vertical: 6, horizontal: 8),
       child: ListTile(
         leading: CircleAvatar(
           radius: 35,
@@ -30,26 +27,20 @@ class TransactionItem extends StatelessWidget {
         ),
         title: Text(
           transaction.title,
-          style: Theme.of(context).textTheme.title,
+          style: Theme.of(context).textTheme.headline6,
         ),
-        subtitle: Text(
-          DateFormat.yMMMMd().format(transaction.date),
-        ),
-        trailing: MediaQuery.of(context).size.width > 400
+        subtitle: Text(DateFormat.yMMMMd().format(transaction.date)),
+        trailing: MediaQuery.of(context).size.width > 450
             ? FlatButton.icon(
                 icon: const Icon(Icons.delete),
                 label: const Text('Delete'),
                 textColor: Theme.of(context).errorColor,
-                onPressed: () => deleteTx(
-                  transaction.id,
-                ),
+                onPressed: () => deleteTx(transaction.id),
               )
             : IconButton(
                 icon: const Icon(Icons.delete),
                 color: Theme.of(context).errorColor,
-                onPressed: () => deleteTx(
-                  transaction.id,
-                ),
+                onPressed: () => deleteTx(transaction.id),
               ),
       ),
     );

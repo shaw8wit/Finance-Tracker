@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import '../widgets/adaptive_flat_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -20,21 +18,21 @@ class _NewTransactionState extends State<NewTransaction> {
   DateTime _selectedDate;
 
   void _submitData() {
-    if (_amountController.text.isEmpty) {
-      return;
-    }
+    if (_amountController.text.isEmpty) return;
 
     final enteredTitle = _titleController.text;
-    final enteredAmount = double.parse(_amountController.text);
+    var enteredAmount;
 
-    if (enteredTitle.isEmpty || enteredAmount <= 0 || _selectedDate == null) {
+    try {
+      enteredAmount = double.parse(_amountController.text);
+    } catch (e) {
       return;
     }
-    widget.addTx(
-      enteredTitle,
-      enteredAmount,
-      _selectedDate,
-    );
+
+    if (enteredTitle.isEmpty || enteredAmount <= 0 || _selectedDate == null)
+      return;
+
+    widget.addTx(enteredTitle, enteredAmount, _selectedDate);
 
     Navigator.of(context).pop();
   }
@@ -46,9 +44,7 @@ class _NewTransactionState extends State<NewTransaction> {
       firstDate: DateTime(2019),
       lastDate: DateTime.now(),
     ).then((pickedDate) {
-      if (pickedDate == null) {
-        return;
-      }
+      if (pickedDate == null) return;
       setState(() {
         _selectedDate = pickedDate;
       });
@@ -74,16 +70,12 @@ class _NewTransactionState extends State<NewTransaction> {
                 decoration: InputDecoration(labelText: 'Title'),
                 controller: _titleController,
                 onSubmitted: (_) => _submitData(),
-                // onChanged: (val) {
-                //   titleInput = val;
-                // },
               ),
               TextField(
                 decoration: InputDecoration(labelText: 'Amount'),
                 keyboardType: TextInputType.number,
                 controller: _amountController,
                 onSubmitted: (_) => _submitData(),
-                // onChanged: (val) => amountInput = val,
               ),
               Container(
                 height: 75,
