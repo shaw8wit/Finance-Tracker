@@ -1,8 +1,17 @@
 import 'package:flutter/foundation.dart';
+import 'package:hive/hive.dart';
 
+part 'transaction.g.dart';
+
+@HiveType(typeId: 0)
 class Transaction {
-  final String id, title;
+  @HiveField(0)
+  final String id;
+  @HiveField(1)
+  final String title;
+  @HiveField(2)
   final double amount;
+  @HiveField(3)
   final DateTime date;
 
   Transaction({

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import '../models/transaction.dart';
 import 'package:intl/intl.dart';
+
+import '../models/transaction.dart';
 
 class TransactionItem extends StatelessWidget {
   const TransactionItem({
@@ -35,12 +36,12 @@ class TransactionItem extends StatelessWidget {
                 icon: const Icon(Icons.delete),
                 label: const Text('Delete'),
                 textColor: Theme.of(context).errorColor,
-                onPressed: () => deleteTx(transaction.id),
+                onPressed: () => deleteTx(),
               )
             : IconButton(
                 icon: const Icon(Icons.delete),
                 color: Theme.of(context).errorColor,
-                onPressed: () => deleteTx(transaction.id),
+                onPressed: () => deleteTx(),
               ),
       ),
     );
