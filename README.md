@@ -1,32 +1,28 @@
 # Finance-Tracker
 
 My first Flutter project.
-Simple app to add one's spending according to date.<br>
+Simple app to keep track of one's spending according to date.
+
 Graph shows the ratio of total spending in the past 7 days.
 
 ## features
-<ul>
-<li>Data is stored in cache so restarting will delete the data.</li>
-<li>No animations added.</li>
-<li>Simple app inline with a Udemy course.</li>
-<li>Different look for the IOS version.</li>
-</ul>
+
++ Data is stored in the HIVE database.
++ Simple app inline with a Udemy course.
++ Different looks for Android & IOS.
++ Fully offline app.
 
 ## Getting Started
 
 To build this project:
-<ul>
-<li>open the Finance folder in VS Code or any other editor.</li>
-<li>set environment to Dart & Flutter.</li>
-<li>flutter & dart plugins are required.</li>
-<li>for testing android:</li>
-<ul>
-  <li>use physical device by turning on the usb debugging option OR</li>
-  <li>use emulator from android studio.</li>
-</ul>
-<li>for IOS testing:</li>
-<ul>
-  <li>use emulator from XCode in macOS.</li>
-</ul>
-<li>build without debugging.</li>
-</ul>
+
++ download as zip or clone to local system.
++ open the repo in VS Code or any other editor.
++ set environment to Dart & Flutter.
++ flutter & dart plugins are required.
++ for testing android:
+  + use physical device by turning on the usb debugging option OR
+  + use emulator from android studio.
++ for IOS testing:
+  + use emulator from XCode in macOS.
++ build without debugging.
