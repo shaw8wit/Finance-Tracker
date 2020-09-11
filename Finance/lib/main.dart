@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:ui';
 
 import 'package:finance_app/widgets/transaction_item.dart';
 import 'package:flutter/cupertino.dart';
@@ -12,7 +13,8 @@ import './widgets/new_transaction.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final appDocDirectory = await path_provider.getApplicationDocumentsDirectory();
+  final appDocDirectory =
+      await path_provider.getApplicationDocumentsDirectory();
   Hive.init(appDocDirectory.path);
   Hive.registerAdapter(TransactionAdapter());
   return runApp(MyApp());
@@ -41,7 +43,10 @@ class _MyAppState extends State<MyApp> {
         errorColor: Colors.red,
         fontFamily: 'Quicksand',
         textTheme: ThemeData.light().textTheme.copyWith(
-              headline6: TextStyle(fontFamily: 'OpenSans', fontWeight: FontWeight.bold, fontSize: 18),
+              headline6: TextStyle(
+                  fontFamily: 'OpenSans',
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18),
               button: TextStyle(color: Colors.white),
             ),
         appBarTheme: AppBarTheme(
@@ -78,7 +83,8 @@ class MyHomePage extends StatelessWidget {
   */
 
   // save inserted details to hive box [expense]
-  void _addNewTransaction(String txTitle, double txAmount, DateTime chosenDate) {
+  void _addNewTransaction(
+      String txTitle, double txAmount, DateTime chosenDate) {
     final newTx = Transaction(
       title: txTitle,
       amount: txAmount,
@@ -99,17 +105,34 @@ class MyHomePage extends StatelessWidget {
   }
 
   // list view to see all the expenses
-  Widget _buildListView() {
+  Widget _buildListView(BuildContext context) {
     return ValueListenableBuilder(
       valueListenable: Hive.box('expense').listenable(),
       builder: (ctx, box, _) {
-        return ListView.builder(
-          itemCount: box.length,
-          itemBuilder: (context, index) {
-            final transaction = box.getAt(index) as Transaction;
-            return TransactionItem(transaction: transaction, deleteTx: () => box.deleteAt(index));
-          },
-        );
+        return (box.length == 0)
+            ? Container(
+                width: MediaQuery.of(context).size.width,
+                height: MediaQuery.of(context).size.height,
+                decoration: BoxDecoration(
+                  image: DecorationImage(
+                    image: AssetImage('assets/images/one.jpg'),
+                    fit: BoxFit.cover,
+                  ),
+                ),
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+                  child: Center(child: Text("No transactions added!")),
+                ),
+              )
+            : ListView.builder(
+                itemCount: box.length,
+                itemBuilder: (context, index) {
+                  final transaction = box.getAt(index) as Transaction;
+                  return TransactionItem(
+                      transaction: transaction,
+                      deleteTx: () => box.deleteAt(index));
+                },
+              );
       },
     );
   }
@@ -141,11 +164,11 @@ class MyHomePage extends StatelessWidget {
     return Platform.isIOS
         ? CupertinoPageScaffold(
             navigationBar: appBar,
-            child: _buildListView(),
+            child: _buildListView(context),
           )
         : Scaffold(
             appBar: appBar,
-            body: _buildListView(),
+            body: _buildListView(context),
             floatingActionButton: FloatingActionButton.extended(
               icon: Icon(Icons.add),
               label: Text("Create"),
