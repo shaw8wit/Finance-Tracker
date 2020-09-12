@@ -109,30 +109,35 @@ class MyHomePage extends StatelessWidget {
     return ValueListenableBuilder(
       valueListenable: Hive.box('expense').listenable(),
       builder: (ctx, box, _) {
-        return (box.length == 0)
-            ? Container(
-                width: MediaQuery.of(context).size.width,
-                height: MediaQuery.of(context).size.height,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: AssetImage('assets/images/one.jpg'),
-                    fit: BoxFit.cover,
+        return Container(
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
+          decoration: BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage('assets/images/one.jpg'),
+              fit: BoxFit.cover,
+            ),
+          ),
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+            child: (box.length == 0)
+                ? Center(
+                    child: Text(
+                      "No transactions added!",
+                      style: TextStyle(fontSize: 20),
+                    ),
+                  )
+                : ListView.builder(
+                    itemCount: box.length,
+                    itemBuilder: (context, index) {
+                      final transaction = box.getAt(index) as Transaction;
+                      return TransactionItem(
+                          transaction: transaction,
+                          deleteTx: () => box.deleteAt(index));
+                    },
                   ),
-                ),
-                child: BackdropFilter(
-                  filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-                  child: Center(child: Text("No transactions added!")),
-                ),
-              )
-            : ListView.builder(
-                itemCount: box.length,
-                itemBuilder: (context, index) {
-                  final transaction = box.getAt(index) as Transaction;
-                  return TransactionItem(
-                      transaction: transaction,
-                      deleteTx: () => box.deleteAt(index));
-                },
-              );
+          ),
+        );
       },
     );
   }
