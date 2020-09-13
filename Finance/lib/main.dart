@@ -1,6 +1,7 @@
 import 'dart:io';
 import 'dart:ui';
 
+import 'package:finance_app/widgets/chart.dart';
 import 'package:finance_app/widgets/transaction_item.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -13,8 +14,7 @@ import './widgets/new_transaction.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  final appDocDirectory =
-      await path_provider.getApplicationDocumentsDirectory();
+  final appDocDirectory = await path_provider.getApplicationDocumentsDirectory();
   Hive.init(appDocDirectory.path);
   Hive.registerAdapter(TransactionAdapter());
   return runApp(MyApp());
@@ -43,10 +43,7 @@ class _MyAppState extends State<MyApp> {
         errorColor: Colors.red,
         fontFamily: 'Quicksand',
         textTheme: ThemeData.light().textTheme.copyWith(
-              headline6: TextStyle(
-                  fontFamily: 'OpenSans',
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18),
+              headline6: TextStyle(fontFamily: 'OpenSans', fontWeight: FontWeight.bold, fontSize: 18),
               button: TextStyle(color: Colors.white),
             ),
         appBarTheme: AppBarTheme(
@@ -83,8 +80,7 @@ class MyHomePage extends StatelessWidget {
   */
 
   // save inserted details to hive box [expense]
-  void _addNewTransaction(
-      String txTitle, double txAmount, DateTime chosenDate) {
+  void _addNewTransaction(String txTitle, double txAmount, DateTime chosenDate) {
     final newTx = Transaction(
       title: txTitle,
       amount: txAmount,
@@ -106,12 +102,19 @@ class MyHomePage extends StatelessWidget {
 
   // list view to see all the expenses
   Widget _buildListView(BuildContext context) {
+    final height = MediaQuery.of(context).size.height;
+    final width = MediaQuery.of(context).size.width;
     return ValueListenableBuilder(
       valueListenable: Hive.box('expense').listenable(),
       builder: (ctx, box, _) {
+        List<Transaction> trans = [];
+        for (var i = 0; i < box.length; i++) {
+          var temp = box.getAt(i) as Transaction;
+          trans.add(temp);
+        }
         return Container(
-          width: MediaQuery.of(context).size.width,
-          height: MediaQuery.of(context).size.height,
+          width: width,
+          height: height,
           decoration: BoxDecoration(
             image: DecorationImage(
               image: AssetImage('assets/images/one.jpg'),
@@ -127,14 +130,26 @@ class MyHomePage extends StatelessWidget {
                       style: TextStyle(fontSize: 20),
                     ),
                   )
-                : ListView.builder(
-                    itemCount: box.length,
-                    itemBuilder: (context, index) {
-                      final transaction = box.getAt(index) as Transaction;
-                      return TransactionItem(
-                          transaction: transaction,
-                          deleteTx: () => box.deleteAt(index));
-                    },
+                : Column(
+                    children: [
+                      Container(
+                        height: height * 0.3,
+                        child: Chart(trans),
+                      ),
+                      Container(
+                        height: height * 0.6,
+                        child: ListView.builder(
+                          itemCount: box.length,
+                          itemBuilder: (context, index) {
+                            final transaction = box.getAt(index) as Transaction;
+                            return TransactionItem(
+                              transaction: transaction,
+                              deleteTx: () => box.deleteAt(index),
+                            );
+                          },
+                        ),
+                      ),
+                    ],
                   ),
           ),
         );
