@@ -17,7 +17,7 @@ class TransactionItem extends StatelessWidget {
   Widget build(BuildContext context) {
     return Card(
       color: Colors.white.withOpacity(0.6),
-      margin: EdgeInsets.symmetric(vertical: 7, horizontal: 10),
+      margin: const EdgeInsets.symmetric(vertical: 7, horizontal: 10),
       child: ListTile(
         leading: CircleAvatar(
           radius: 35,

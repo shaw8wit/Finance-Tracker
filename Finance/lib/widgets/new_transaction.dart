@@ -1,11 +1,11 @@
-import '../widgets/adaptive_flat_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../widgets/adaptive_flat_button.dart';
+
 class NewTransaction extends StatefulWidget {
   final Function addTx;
-
   NewTransaction(this.addTx);
 
   @override
@@ -13,27 +13,21 @@ class NewTransaction extends StatefulWidget {
 }
 
 class _NewTransactionState extends State<NewTransaction> {
-  final _titleController = TextEditingController(),
-      _amountController = TextEditingController();
+  final _titleController = TextEditingController(), _amountController = TextEditingController();
   DateTime _selectedDate;
 
   void _submitData() {
     if (_amountController.text.isEmpty) return;
-
-    final enteredTitle = _titleController.text;
     var enteredAmount;
-
     try {
       enteredAmount = double.parse(_amountController.text);
     } catch (e) {
+      print(e);
       return;
     }
-
-    if (enteredTitle.isEmpty || enteredAmount <= 0 || _selectedDate == null)
-      return;
-
+    final enteredTitle = _titleController.text;
+    if (enteredTitle.isEmpty || enteredAmount <= 0 || _selectedDate == null) return;
     widget.addTx(enteredTitle, enteredAmount, _selectedDate);
-
     Navigator.of(context).pop();
   }
 
@@ -55,13 +49,13 @@ class _NewTransactionState extends State<NewTransaction> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Card(
-        elevation: 5,
+        elevation: 10,
         child: Container(
           padding: EdgeInsets.only(
-            top: 10,
-            left: 10,
-            right: 10,
-            bottom: MediaQuery.of(context).viewInsets.bottom + 10,
+            top: 20,
+            left: 20,
+            right: 20,
+            bottom: MediaQuery.of(context).viewInsets.bottom + 20,
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.end,
@@ -86,9 +80,10 @@ class _NewTransactionState extends State<NewTransaction> {
                         _selectedDate == null
                             ? 'No Date Chosen'
                             : 'Picked Date : ${DateFormat.yMMMd().format(_selectedDate)}',
+                        style: TextStyle(fontWeight: FontWeight.w600),
                       ),
                     ),
-                    AdaptiveFlatButton('Choose Date : ', _presentDatePicker),
+                    AdaptiveFlatButton('Choose Date', _presentDatePicker),
                   ],
                 ),
               ),

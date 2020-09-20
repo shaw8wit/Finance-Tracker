@@ -1,12 +1,10 @@
 import 'dart:io';
 import 'dart:ui';
 
-import 'package:finance_app/widgets/chart.dart';
-import 'package:finance_app/widgets/transaction_item.dart';
+import 'package:finance_app/widgets/transaction_list.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
-import 'package:hive_flutter/hive_flutter.dart';
 import 'package:path_provider/path_provider.dart' as path_provider;
 
 import './models/transaction.dart';
@@ -61,12 +59,9 @@ class _MyAppState extends State<MyApp> {
         ),
         builder: (ctx, snapshot) {
           if (snapshot.connectionState == ConnectionState.done) {
-            if (snapshot.hasError)
-              return Text(snapshot.error.toString());
-            else
-              return MyHomePage();
-          } else
-            return Scaffold();
+            return (snapshot.hasError) ? Text(snapshot.error.toString()) : MyHomePage();
+          }
+          return CircularProgressIndicator();
         },
       ),
     );
@@ -100,63 +95,6 @@ class MyHomePage extends StatelessWidget {
     );
   }
 
-  // list view to see all the expenses
-  Widget _buildListView(BuildContext context) {
-    final height = MediaQuery.of(context).size.height;
-    final width = MediaQuery.of(context).size.width;
-    return ValueListenableBuilder(
-      valueListenable: Hive.box('expense').listenable(),
-      builder: (ctx, box, _) {
-        List<Transaction> trans = [];
-        for (var i = 0; i < box.length; i++) {
-          var temp = box.getAt(i) as Transaction;
-          trans.add(temp);
-        }
-        return Container(
-          width: width,
-          height: height,
-          decoration: BoxDecoration(
-            image: DecorationImage(
-              image: AssetImage('assets/images/one.jpg'),
-              fit: BoxFit.cover,
-            ),
-          ),
-          child: BackdropFilter(
-            filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-            child: (box.length == 0)
-                ? Center(
-                    child: Text(
-                      "No transactions added!",
-                      style: TextStyle(fontSize: 20),
-                    ),
-                  )
-                : Column(
-                    children: [
-                      Container(
-                        height: height * 0.3,
-                        child: Chart(trans),
-                      ),
-                      Container(
-                        height: height * 0.6,
-                        child: ListView.builder(
-                          itemCount: box.length,
-                          itemBuilder: (context, index) {
-                            final transaction = box.getAt(index) as Transaction;
-                            return TransactionItem(
-                              transaction: transaction,
-                              deleteTx: () => box.deleteAt(index),
-                            );
-                          },
-                        ),
-                      ),
-                    ],
-                  ),
-          ),
-        );
-      },
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     final PreferredSizeWidget appBar = Platform.isIOS
@@ -184,11 +122,11 @@ class MyHomePage extends StatelessWidget {
     return Platform.isIOS
         ? CupertinoPageScaffold(
             navigationBar: appBar,
-            child: _buildListView(context),
+            child: TransactionList(),
           )
         : Scaffold(
             appBar: appBar,
-            body: _buildListView(context),
+            body: TransactionList(),
             floatingActionButton: FloatingActionButton.extended(
               icon: Icon(Icons.add),
               label: Text("Create"),
