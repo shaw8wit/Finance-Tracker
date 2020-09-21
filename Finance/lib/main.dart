@@ -37,7 +37,7 @@ class _MyAppState extends State<MyApp> {
       title: 'Track Expense',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.purple,
+        primarySwatch: Colors.teal,
         errorColor: Colors.red,
         fontFamily: 'Quicksand',
         textTheme: ThemeData.light().textTheme.copyWith(
