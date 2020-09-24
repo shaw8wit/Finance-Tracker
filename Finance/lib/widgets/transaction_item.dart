@@ -21,9 +21,9 @@ class TransactionItem extends StatelessWidget {
       child: ListTile(
         contentPadding: const EdgeInsets.all(8),
         leading: CircleAvatar(
-          radius: 35,
+          radius: 40,
           child: Padding(
-            padding: const EdgeInsets.all(8),
+            padding: const EdgeInsets.all(16),
             child: FittedBox(child: Text('\$${transaction.amount}')),
           ),
         ),
