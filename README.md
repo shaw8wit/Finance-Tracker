@@ -1,5 +1,12 @@
 # Finance-Tracker
 
+![Github Followers](https://img.shields.io/github/followers/shaw8wit?label=Follow&style=flat-square)&nbsp;
+![GitHub stars](https://img.shields.io/github/stars/shaw8wit/Finance-Tracker?style=flat-square)&nbsp;
+![GitHub forks](https://img.shields.io/github/forks/shaw8wit/Finance-Tracker?style=flat-square)&nbsp;
+![GitHub watchers](https://img.shields.io/github/watchers/shaw8wit/Finance-Tracker?style=flat-square)
+
+![Demo](https://github.com/shaw8wit/Finance-Tracker/blob/master/Screenshots/Android/b.png)![Hover](https://github.com/shaw8wit/Finance-Tracker/blob/master/Screenshots/Hover/c.png)
+
 Simple app to keep track of one's spending according to date.
 
 Graph shows the ratio of total spending in the past 7 days.
